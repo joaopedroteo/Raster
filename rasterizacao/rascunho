@@ -1,0 +1,59 @@
+// Aqui o codigo para desenhar uma linha.
+    // Para desenhar um pixel, use "DrawPixel(x, y, dc)".
+    #warning BigPixelCanvas::DrawLine não foi implementado (necessário para a rasterização de segmentos de reta).
+    int dx = p1.x - p0.x;
+    int dy = p1.y - p0.y;
+    int incremento = 1;
+    wxPoint ponto0 = p0;
+    wxPoint ponto1 = p1;
+    if (dx < 0 && dy > 0) {
+        cout << dx << endl;
+        ponto0 = p1;
+        ponto1 = p0;
+        dx = -dx;
+        dy = -dy;
+    }
+    if (dx > dy) {
+        if(dy < 0) {
+            incremento = -1;
+            dy = -dy;
+        }
+        
+        int d = 2 * dy - dx;
+        int Pe = 2 *dy;
+        int Pne = 2*(dy-dx);
+        int x = ponto0.x;
+        int y = ponto0.y;
+        DrawPixel(x, y, dc);
+        while (x < ponto1.x) {
+            if (d <= 0) {
+                d += Pe;
+            } else {
+                d += Pne;
+                y += incremento;
+            }
+            ++x;
+            DrawPixel(x, y, dc);
+        }
+    } else {
+        if (dx < 0) {
+            incremento = -1;
+            dx = -dx;
+        }
+        int d = 2 * dy - dx;
+        int Pe = 2 *dx;
+        int Pne = 2*(dx-dy);
+        int x = p0.x;
+        int y = p0.y;
+        DrawPixel(x, y, dc);
+        while(y < p1.y) {
+            if (d <= 0){
+                d += Pe;
+            } else {
+                d += Pne;
+                x += incremento;
+            }
+            ++y;
+            DrawPixel(x, y, dc);
+        }
+    }
