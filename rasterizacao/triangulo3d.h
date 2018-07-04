@@ -25,6 +25,7 @@ class Triangulo3D
         // desenhado.
 #warning Triangulo3D::AtualizarIntervaloHorizontal não foi completamente implementado (necessário para o z-buffer, procure por FixMe, retire os pragmas quando for implementar).
         bool AtualizarIntervaloHorizontal(IntervaloHorizontal<Cor,Coord>* ptIntervalo) const {
+            std::cout << "AQUI";
             static bool naoInicializado = true;
             static bool primeiraParte = true; // primeira ou segunda parte?
 #pragma GCC diagnostic push
@@ -104,6 +105,8 @@ class Triangulo3D
         Ponto P1() const { return mP1; }
         Ponto P2() const { return mP2; }
         Ponto P3() const { return mP3; }
+        
+        
     private:
         Ponto mP1;
         Ponto mP2;

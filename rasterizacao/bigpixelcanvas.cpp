@@ -202,18 +202,64 @@ void BigPixelCanvas::DesenharTriangulo2D(const Triang2D& triangulo) {
 }
 
 void BigPixelCanvas::DesenharTriangulo2D(const Triang2D& triangulo, wxDC& dc) {
-    Interv2D intervalo;
-    while (triangulo.AtualizarIntervaloHorizontal(&intervalo))
-        if (intervalo.Valido())
-            DesenharIntervaloHorizontal(intervalo, dc);
+    Ponto p0 = triangulo.P1();
+    Ponto p1 = triangulo.P2();
+    Ponto p2 = triangulo.P3();
+    
+    int variacaoP0P1 = p1.mY - p0.mY;
+    int variacaoP1P2 = p2.mY - p1.mY;
+    int variacaoP2P0 = p0.mY - p2.mY;
+    
+    int moduloVariacaoP0P1 = (variacaoP0P1 < 0) ? -variacaoP0P1 : variacaoP0P1;
+    int moduloVariacaoP1P2 = (variacaoP1P2 < 0) ? -variacaoP1P2 : variacaoP1P2;
+    int moduloVariacaoP2P0 = (variacaoP2P0 < 0) ? -variacaoP2P0 : variacaoP2P0;
+    
+    int variacaoArestaLonga = moduloVariacaoP0P1;
+    Ponto arestaLongaP0 = p0;
+    Ponto arestaLongaP1 = p1;
+    Ponto sobrou = p2;
+    if(variacaoArestaLonga < moduloVariacaoP1P2) {
+        variacaoArestaLonga = moduloVariacaoP1P2;
+        arestaLongaP0 = p1;
+        arestaLongaP1 = p2;
+        sobrou = p0;
+    }
+    if(variacaoArestaLonga < moduloVariacaoP2P0) {
+        variacaoArestaLonga = moduloVariacaoP2P0;
+        arestaLongaP0 = p2;
+        arestaLongaP1 = p0;
+        sobrou = p1;
+    }
+    
+    if(arestaLongaP0.mY < arestaLongaP1.mY) {
+        int xesq = arestaLongaP0.mX;
+        int xdir = xesq;
+        
+    }
+    
+    
+    
+    
+    
+    
+//    Interv2D intervalo;
+//    int i = 0;
+//    while (triangulo.AtualizarIntervaloHorizontal(&intervalo)) {
+//        cout << i << ' ';
+//        i++;
+//    
+//        if (intervalo.Valido())
+//            DesenharIntervaloHorizontal(intervalo, dc);
+//    }
 }
 
 void BigPixelCanvas::DesenharTriangulo3D(const Triang3D& triangulo, wxDC& dc)
 {
     Interv3D intervalo;
-    while (triangulo.AtualizarIntervaloHorizontal(&intervalo))
+    while (triangulo.AtualizarIntervaloHorizontal(&intervalo)) {
         if (intervalo.Valido())
             DesenharIntervaloHorizontal(intervalo, dc);
+    }
 }
 
 void BigPixelCanvas::DesenharIntervaloHorizontal(const Interv2D& intervalo, wxDC& dc)

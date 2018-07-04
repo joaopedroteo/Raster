@@ -1,0 +1,65 @@
+g++ -c integerdialog.cpp  -Wall -I/usr/lib/x86_64-linux-gnu/wx/include/gtk2-unicode-3.0 -I/usr/include/wx-3.0 -D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXGTK__ -pthread  -o integerdialog.o
+g++ -c drawmodedialog.cpp  -Wall -I/usr/lib/x86_64-linux-gnu/wx/include/gtk2-unicode-3.0 -I/usr/include/wx-3.0 -D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXGTK__ -pthread  -o drawmodedialog.o
+g++ -c bigpixelcanvas.cpp  -Wall -I/usr/lib/x86_64-linux-gnu/wx/include/gtk2-unicode-3.0 -I/usr/include/wx-3.0 -D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXGTK__ -pthread  -o bigpixelcanvas.o
+In file included from bigpixelcanvas.h:4:0,
+                 from bigpixelcanvas.cpp:1:
+triangulo3d.h:26:2: warning: #warning Triangulo3D::AtualizarIntervaloHorizontal não foi completamente implementado (necessário para o z-buffer, procure por FixMe, retire os pragmas quando for implementar). [-Wcpp]
+ #warning Triangulo3D::AtualizarIntervaloHorizontal não foi completamente implementado (necessário para o z-buffer, procure por FixMe, retire os pragmas quando for implementar).
+  ^
+bigpixelcanvas.cpp:160:6: warning: #warning BigPixelCanvas::DrawCircle não foi implementado (necessário para rasterização de círculos). [-Wcpp]
+     #warning BigPixelCanvas::DrawCircle não foi implementado (necessário para rasterização de círculos).
+      ^
+bigpixelcanvas.cpp:233:6: warning: #warning BigPixelCanvas::DesenharIntervaloHorizontal não foi implementado (necessário para a rasterização do z-buffer). [-Wcpp]
+     #warning BigPixelCanvas::DesenharIntervaloHorizontal não foi implementado (necessário para a rasterização do z-buffer).
+      ^
+In file included from bigpixelcanvas.h:4:0,
+                 from bigpixelcanvas.cpp:1:
+triangulo3d.h: In instantiation of ‘bool Triangulo3D<Cor, Coord>::AtualizarIntervaloHorizontal(IntervaloHorizontal<Cor, Coord>*) const [with Cor = wxColour; Coord = int]’:
+bigpixelcanvas.cpp:206:61:   required from here
+triangulo3d.h:33:27: warning: variable ‘variacaoZX’ set but not used [-Wunused-but-set-variable]
+             static double variacaoZX; // quanto o z varia para cada x
+                           ^
+triangulo3d.h:34:27: warning: variable ‘variacaoZY’ set but not used [-Wunused-but-set-variable]
+             static double variacaoZY; // quanto o z varia para cada y
+                           ^
+triangulo3d.h:35:27: warning: variable ‘incrementoXMin’ set but not used [-Wunused-but-set-variable]
+             static double incrementoXMin; // quanto o xMin varia para cada y
+                           ^
+triangulo3d.h:36:27: warning: variable ‘incrementoXMax’ set but not used [-Wunused-but-set-variable]
+             static double incrementoXMax; // quanto o xMax varia para cada y
+                           ^
+triangulo3d.h:39:27: warning: variable ‘z’ set but not used [-Wunused-but-set-variable]
+             static double z; // coordenada z em xMin
+                           ^
+triangulo3d.h: In instantiation of ‘bool Triangulo3D<Cor, Coord>::AtualizarIntervaloHorizontal(IntervaloHorizontal<Cor, Coord>*) const [with Cor = wxColour; Coord = double]’:
+bigpixelcanvas.cpp:214:61:   required from here
+triangulo3d.h:33:27: warning: variable ‘variacaoZX’ set but not used [-Wunused-but-set-variable]
+             static double variacaoZX; // quanto o z varia para cada x
+                           ^
+triangulo3d.h:34:27: warning: variable ‘variacaoZY’ set but not used [-Wunused-but-set-variable]
+             static double variacaoZY; // quanto o z varia para cada y
+                           ^
+triangulo3d.h:35:27: warning: variable ‘incrementoXMin’ set but not used [-Wunused-but-set-variable]
+             static double incrementoXMin; // quanto o xMin varia para cada y
+                           ^
+triangulo3d.h:36:27: warning: variable ‘incrementoXMax’ set but not used [-Wunused-but-set-variable]
+             static double incrementoXMax; // quanto o xMax varia para cada y
+                           ^
+triangulo3d.h:39:27: warning: variable ‘z’ set but not used [-Wunused-but-set-variable]
+             static double z; // coordenada z em xMin
+                           ^
+g++ -c zbuffer.cpp  -Wall  -o zbuffer.o
+zbuffer.cpp:40:6: warning: #warning ZBuffer::IsVisible não foi completamente implementado. [-Wcpp]
+     #warning ZBuffer::IsVisible não foi completamente implementado.
+      ^
+zbuffer.cpp: In member function ‘bool ZBuffer::IsVisible(int, int, double)’:
+zbuffer.cpp:41:1: warning: no return statement in function returning non-void [-Wreturn-type]
+ }
+ ^
+g++ -c -o main.o  -Wall -Wall -I/usr/lib/x86_64-linux-gnu/wx/include/gtk2-unicode-3.0 -I/usr/include/wx-3.0 -D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXGTK__ -pthread  main.cpp
+In file included from bigpixelcanvas.h:4:0,
+                 from main.cpp:4:
+triangulo3d.h:26:2: warning: #warning Triangulo3D::AtualizarIntervaloHorizontal não foi completamente implementado (necessário para o z-buffer, procure por FixMe, retire os pragmas quando for implementar). [-Wcpp]
+ #warning Triangulo3D::AtualizarIntervaloHorizontal não foi completamente implementado (necessário para o z-buffer, procure por FixMe, retire os pragmas quando for implementar).
+  ^
+g++ integerdialog.o drawmodedialog.o bigpixelcanvas.o zbuffer.o main.o -L/usr/lib/x86_64-linux-gnu -pthread   -lwx_gtk2u_core-3.0 -lwx_baseu-3.0   -o raster
