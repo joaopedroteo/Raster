@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-
+#include <cmath>
 using namespace std;
 
 BEGIN_EVENT_TABLE(BigPixelCanvas, wxPanel)
@@ -92,7 +92,6 @@ void BigPixelCanvas::DrawLine(const wxPoint& p0, const wxPoint& p1, wxDC& dc)
 {
     // Aqui o codigo para desenhar uma linha.
     // Para desenhar um pixel, use "DrawPixel(x, y, dc)".
-    #warning BigPixelCanvas::DrawLine não foi implementado (necessário para a rasterização de segmentos de reta).
     int dx = p1.x - p0.x;
     int dy = p1.y - p0.y;
     int incremento = 1;
@@ -159,6 +158,41 @@ void BigPixelCanvas::DrawCircle(const wxPoint& center, int radius, wxDC& dc)
     // Aqui o codigo para desenhar um circulo.
     // Para desenhar um pixel, use "DrawPixel(x, y, dc)".
     #warning BigPixelCanvas::DrawCircle não foi implementado (necessário para rasterização de círculos).
+    
+    int x = 0;
+    int y = radius;
+    DrawPixel(center.x, center.y + y, dc);
+    DrawPixel(center.x + y, center.y, dc);
+    DrawPixel(center.x, center.y - y, dc);
+    DrawPixel(center.x - y, center.y, dc);
+    //int d = pow(x + 1, 2) + pow(y - 0.5, 2) - pow(radius, 2);
+    //int Pe = pow(x + 2, 2) + pow(y - 0.5, 2) - pow(radius, 2);
+    //int Pse = pow(x+2, 2)+ pow(y-1.5, 2) - pow(radius, 2);
+    int para = 0;
+    int d = int(5/4 - radius);
+    while (y > (radius / 2)) {
+        cout << y << ' ' << radius << endl;
+        int Pe = 2*(x) + 3;
+        int Pse = 2*(x) - 2*(y) + 5;
+        
+        if (d < 0) {
+            d += Pe;
+        } else {
+            d += Pse;
+            --y;
+        }
+        x++;
+        para +=1;
+        DrawPixel(center.x + x, center.y + y, dc);
+        DrawPixel(center.x + y, center.y + x, dc);
+        DrawPixel(center.x + y, center.y - x,dc);
+        DrawPixel(center.x + x, center.y - y,dc);
+        DrawPixel(center.x - x, center.y - y,dc);
+        DrawPixel(center.x - y, center.y - x,dc);
+        DrawPixel(center.x - y, center.y + x,dc);
+        DrawPixel(center.x - x, center.y + y,dc);
+
+    }
 }
 
 void BigPixelCanvas::DesenharTriangulo2D(const Triang2D& triangulo) {
