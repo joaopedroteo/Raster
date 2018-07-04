@@ -157,21 +157,27 @@ void BigPixelCanvas::DrawCircle(const wxPoint& center, int radius, wxDC& dc)
 {
     // Aqui o codigo para desenhar um circulo.
     // Para desenhar um pixel, use "DrawPixel(x, y, dc)".
-    #warning BigPixelCanvas::DrawCircle não foi implementado (necessário para rasterização de círculos).
     
     int x = 0;
     int y = radius;
-    DrawPixel(center.x, center.y + y, dc);
-    DrawPixel(center.x + y, center.y, dc);
-    DrawPixel(center.x, center.y - y, dc);
-    DrawPixel(center.x - y, center.y, dc);
-    //int d = pow(x + 1, 2) + pow(y - 0.5, 2) - pow(radius, 2);
-    //int Pe = pow(x + 2, 2) + pow(y - 0.5, 2) - pow(radius, 2);
-    //int Pse = pow(x+2, 2)+ pow(y-1.5, 2) - pow(radius, 2);
-    int para = 0;
-    int d = int(5/4 - radius);
-    while (y > (radius / 2)) {
-        cout << y << ' ' << radius << endl;
+    DrawPixel(center.x, center.y, dc);
+
+    int d = 1 - radius;
+    int limiteOctante = int((sqrt(2)/2) * radius);
+    while (y >= limiteOctante) {
+        
+        for (int i = y; i > 0; --i){
+            DrawPixel(center.x + x, center.y + i, dc); 
+            DrawPixel(center.x + i, center.y - x,dc);
+            DrawPixel(center.x - x, center.y - i,dc);
+            DrawPixel(center.x - i, center.y + x,dc);
+        }
+        for (int i = y; i > limiteOctante; --i){
+            DrawPixel(center.x + i, center.y + x, dc);
+            DrawPixel(center.x + x, center.y - i,dc);
+            DrawPixel(center.x - i, center.y - x,dc);
+            DrawPixel(center.x - x, center.y + i,dc);
+        }
         int Pe = 2*(x) + 3;
         int Pse = 2*(x) - 2*(y) + 5;
         
@@ -182,17 +188,43 @@ void BigPixelCanvas::DrawCircle(const wxPoint& center, int radius, wxDC& dc)
             --y;
         }
         x++;
-        para +=1;
-        DrawPixel(center.x + x, center.y + y, dc);
-        DrawPixel(center.x + y, center.y + x, dc);
-        DrawPixel(center.x + y, center.y - x,dc);
-        DrawPixel(center.x + x, center.y - y,dc);
-        DrawPixel(center.x - x, center.y - y,dc);
-        DrawPixel(center.x - y, center.y - x,dc);
-        DrawPixel(center.x - y, center.y + x,dc);
-        DrawPixel(center.x - x, center.y + y,dc);
-
     }
+
+    // CODIGO PARA O CIRCULO NÃO PREENCHIDO
+    //     int x = 0;
+    //     int y = radius;
+    //     DrawPixel(center.x, center.y + y, dc);
+    //     DrawPixel(center.x + y, center.y, dc);
+    //     DrawPixel(center.x, center.y - y, dc);
+    //     DrawPixel(center.x - y, center.y, dc);
+    //     //int d = pow(x + 1, 2) + pow(y - 0.5, 2) - pow(radius, 2);
+    //     //int Pe = pow(x + 2, 2) + pow(y - 0.5, 2) - pow(radius, 2);
+    //     //int Pse = pow(x+2, 2)+ pow(y-1.5, 2) - pow(radius, 2);
+    //     int para = 0;
+    //     int d = int(5/4 - radius);
+    //     while (y > (radius / 2)) {
+    //         cout << y << ' ' << radius << endl;
+    //         int Pe = 2*(x) + 3;
+    //         int Pse = 2*(x) - 2*(y) + 5;
+            
+    //         if (d < 0) {
+    //             d += Pe;
+    //         } else {
+    //             d += Pse;
+    //             --y;
+    //         }
+    //         x++;
+    //         para +=1;
+    //         DrawPixel(center.x + x, center.y + y, dc);
+    //         DrawPixel(center.x + y, center.y + x, dc);
+    //         DrawPixel(center.x + y, center.y - x,dc);
+    //         DrawPixel(center.x + x, center.y - y,dc);
+    //         DrawPixel(center.x - x, center.y - y,dc);
+    //         DrawPixel(center.x - y, center.y - x,dc);
+    //         DrawPixel(center.x - y, center.y + x,dc);
+    //         DrawPixel(center.x - x, center.y + y,dc);
+
+    // }
 }
 
 void BigPixelCanvas::DesenharTriangulo2D(const Triang2D& triangulo) {
