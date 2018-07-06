@@ -234,10 +234,194 @@ void BigPixelCanvas::DesenharTriangulo2D(const Triang2D& triangulo) {
 }
 
 void BigPixelCanvas::DesenharTriangulo2D(const Triang2D& triangulo, wxDC& dc) {
-    Interv2D intervalo;
-    while (triangulo.AtualizarIntervaloHorizontal(&intervalo))
-        if (intervalo.Valido())
-            DesenharIntervaloHorizontal(intervalo, dc);
+    Ponto p0 = triangulo.P1();
+    Ponto p1 = triangulo.P2();
+    Ponto p2 = triangulo.P3();
+
+    int dyP0P1 = (p0.mY < p1.mY) ? (p1.mY - p0.mY) : (p0.mY - p1.mY);
+    int dyP1P2 = (p1.mY < p2.mY) ? (p2.mY - p1.mY) : (p1.mY - p2.mY);
+    int dyP0P2 = (p2.mY < p0.mY) ? (p0.mY - p2.mY) : (p2.mY - p0.mY);
+    
+    int dyArestaLonga = dyP0P1;
+    Ponto arestaLongaP0 = p0;
+    Ponto arestaLongaP1 = p1;
+    Ponto pontoMeio = p2;
+    if (dyArestaLonga < dyP1P2) {
+        dyArestaLonga = dyP1P2;
+        arestaLongaP0 = p1;
+        arestaLongaP1 = p2;
+        pontoMeio = p0;
+    }
+    if (dyArestaLonga < dyP0P2) {
+        dyArestaLonga = dyP1P2;
+        arestaLongaP0 = p0;
+        arestaLongaP1 = p2;
+        pontoMeio = p1;    
+    }
+
+    if (arestaLongaP1.mY < arestaLongaP0.mY) {
+        Ponto aux = arestaLongaP0;
+        arestaLongaP0 = arestaLongaP1;
+        arestaLongaP1 = aux;
+    }
+
+    int yMin = arestaLongaP0.mY;
+    int yMax = pontoMeio.mY;
+    float xEsq = arestaLongaP0.mX;
+    float xDir = arestaLongaP0.mX;
+    
+    
+    float dAresta2 = (float) (arestaLongaP0.mX - pontoMeio.mX) / (arestaLongaP0.mY - pontoMeio.mY);
+    float dArestaLonga = (float) (arestaLongaP1.mX - arestaLongaP0.mX)/ (arestaLongaP1.mY - arestaLongaP0.mY);
+    float dAresta3 = (float) (arestaLongaP1.mX - pontoMeio.mX)/ (arestaLongaP1.mY - pontoMeio.mY);
+    float dxEsq, dxDir;
+
+    bool pontoMeioAEsquerda = pontoMeio.mX < (dArestaLonga * (yMax - yMin) + arestaLongaP0.mX);
+    if (pontoMeioAEsquerda) {
+        dxEsq = dAresta2;
+        dxDir = dArestaLonga;
+    } else {
+        dxEsq = dArestaLonga;
+        dxDir = dAresta2;
+    }
+
+    int y = yMin;
+    
+    while(y < yMax) {
+        for (int x = xEsq; x < xDir; x++) {
+            DrawPixel(x, y, dc);
+        }
+        xEsq += dxEsq;
+        xDir += dxDir;
+        y++;
+    }
+
+    yMin = pontoMeio.mY;
+    yMax = arestaLongaP1.mY;
+    if (pontoMeioAEsquerda) {
+        xEsq = pontoMeio.mX;
+        dxEsq = dAresta3;
+        dxDir = dArestaLonga;
+    } else {
+        xDir = pontoMeio.mX;
+        dxEsq = dArestaLonga;
+        dxDir = dAresta3;
+    }
+
+    y = yMin;
+    cout << dxDir <<  endl;
+    while(y < yMax) {
+        for (int x = xEsq; x < xDir; x++) {
+            DrawPixel(x, y, dc);
+        }
+        xEsq += dxEsq;
+        xDir += dxDir;
+        y++;
+    }
+
+    // Ponto p0 = triangulo.P1();
+    // Ponto p1 = triangulo.P2();
+    // Ponto p2 = triangulo.P3();
+    
+    // int variacaoP0P1 = p1.mY - p0.mY;
+    // int variacaoP1P2 = p2.mY - p1.mY;
+    // int variacaoP2P0 = p0.mY - p2.mY;
+    
+    // int moduloVariacaoP0P1 = (variacaoP0P1 < 0) ? -variacaoP0P1 : variacaoP0P1;
+    // int moduloVariacaoP1P2 = (variacaoP1P2 < 0) ? -variacaoP1P2 : variacaoP1P2;
+    // int moduloVariacaoP2P0 = (variacaoP2P0 < 0) ? -variacaoP2P0 : variacaoP2P0;
+    
+    // int variacaoArestaLonga = moduloVariacaoP0P1;
+    // Ponto arestaLongaP0 = p0;
+    // Ponto arestaLongaP1 = p1;
+    // Ponto sobrou = p2;
+    // cout << p0 << " " << p1 << " " << p2 << endl;
+    // if(variacaoArestaLonga < moduloVariacaoP1P2) {
+    //     variacaoArestaLonga = moduloVariacaoP1P2;
+    //     arestaLongaP0 = p1;
+    //     arestaLongaP1 = p2;
+    //     sobrou = p0;
+    // }
+    // if(variacaoArestaLonga < moduloVariacaoP2P0) {
+    //     variacaoArestaLonga = moduloVariacaoP2P0;
+    //     arestaLongaP0 = p2;
+    //     arestaLongaP1 = p0;
+    //     sobrou = p1;
+    // }
+    
+    // if(arestaLongaP0.mY > arestaLongaP1.mY) {
+    //     Ponto temp = arestaLongaP0;
+    //     arestaLongaP0 = arestaLongaP1;
+    //     arestaLongaP1 = temp;
+    // }
+    
+    // float xesq = arestaLongaP0.mX;
+    // float xdir = xesq;
+    // int ymin = arestaLongaP0.mY;
+    // int ymax = sobrou.mY;
+    
+    // float dxEsq;
+    // float dxDir;
+    // float dxAresta2;
+    // float dxAresta3;
+    // float dxArestaLonga;
+
+    // dxAresta2 = ((float) (sobrou.mX - arestaLongaP0.mX))/(sobrou.mY - arestaLongaP0.mY);
+    // dxAresta3 = ((float) (arestaLongaP1.mX - sobrou.mX))/(arestaLongaP1.mY - sobrou.mY);
+    // dxArestaLonga = ((float) (arestaLongaP1.mX - arestaLongaP0.mX))/(arestaLongaP1.mY - arestaLongaP0.mY);
+    // cout << arestaLongaP0.mX << " " << arestaLongaP1.mX << endl << "+++++++" << endl;
+
+    // // int limitePrimeiroTriangulo = (dxArestaLonga * (ymax - ymin)) + arestaLongaP0.mX;
+    // // cout << limitePrimeiroTriangulo << endl;
+    // bool sobrouEstaAEsquerda = sobrou.mX < arestaLongaP0.mX;
+
+    // if(sobrouEstaAEsquerda) {
+    //     cout << "ESQUERDA" << endl;
+    //     dxEsq = dxAresta2;
+    //     dxDir = dxArestaLonga;
+    // } else {
+    //     cout << "DIREITA" << endl;
+    //     dxDir = dxAresta2;
+    //     dxEsq = dxArestaLonga;
+    // }
+
+    // cout << sobrou << endl;
+
+    // int y = ymin;
+    // while(y < ymax) {
+    //     for(int x = xesq; x < xdir; x++) {
+    //         DrawPixel(x, y, dc);
+    //     }
+    //     xesq += dxEsq;
+    //     xdir += dxDir;
+    //     y++;
+    // }
+
+    // ymin = sobrou.mY;
+    // ymax = arestaLongaP1.mY;
+
+    // if(sobrouEstaAEsquerda) {
+    //     xesq = sobrou.mX;
+    //     dxEsq = dxAresta3;
+    //     dxDir = dxArestaLonga;
+    // } else {
+    //     xdir = sobrou.mX;
+    //     dxDir = dxAresta3;
+    //     dxEsq = dxArestaLonga;
+    // }
+
+    // y = ymin;
+    // while(y < ymax) {
+    //     // cout << "ENTROU2" << endl;
+    //     // cout << xesq << " " << xdir << endl;
+    //     for(int x = xesq; x < xdir; x++) {
+    //         DrawPixel((int) x, y, dc);
+    //     }
+    //     xesq += dxEsq;
+    //     xdir += dxDir;
+    //     y++;
+    // }
+    // cout << "--" << endl;
 }
 
 void BigPixelCanvas::DesenharTriangulo3D(const Triang3D& triangulo, wxDC& dc)
@@ -263,6 +447,7 @@ void BigPixelCanvas::DesenharIntervaloHorizontal(const Interv3D& intervalo, wxDC
     // para a implementação do z-buffer.
     // Desenhar um intervalo 3D é como desenhar um intervalo 2D, usando z-buffer.
     #warning BigPixelCanvas::DesenharIntervaloHorizontal não foi implementado (necessário para a rasterização do z-buffer).
+    
 }
 
 void BigPixelCanvas::OnPaint(wxPaintEvent& event)
